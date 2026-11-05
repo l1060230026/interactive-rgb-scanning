@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "interactive-rgb-scanning"
+version = "0.1.0"
+description = "Continuous RGB reconstruction with spatial assessment and observation-driven feedback"
+requires-python = ">=3.11"
+license = {text = "CC-BY-NC-SA-4.0"}
+dependencies = ["numpy>=1.26,<2", "opencv-python-headless>=4.11,<5", "pillow>=11", "scipy>=1.15", "plyfile>=1.1"]
+
+[project.optional-dependencies]
+mobile = ["aiohttp>=3.14,<4", "livekit==1.1.21", "livekit-api==1.2.2", "av==16.1.0"]
+recording = ["av==16.1.0"]
+
+[project.scripts]
+rgb-scan = "interactive_rgb_scanning.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

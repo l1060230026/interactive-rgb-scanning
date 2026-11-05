@@ -1,0 +1,47 @@
+{
+  "backend": "mast3r-slam",
+  "upstream_commit": "6717231a2daf55d501a5824bbec43314d4fb77d9",
+  "native_config": "config/base.yaml",
+  "buffer": 256,
+  "cpu_threads": 4,
+  "max_allocated_gib": 9,
+  "seed": 11,
+  "max_input_fps": 6,
+  "max_seconds": 600,
+  "input_video_recording": true,
+  "recording_checkpoint_seconds": [
+    20,
+    60,
+    120,
+    180,
+    300,
+    480
+  ],
+  "coverage": {
+    "mode": "structured_surface",
+    "relative_depth_jump": 0.05,
+    "confidence_threshold": 1.5,
+    "keyframes_per_batch": 8
+  },
+  "feedback": {
+    "confirmation_updates": 2,
+    "observation_window_seconds": 2,
+    "windows_before_light": 3,
+    "native_cell_size": 16,
+    "normal_opacity": 0.45,
+    "surface_alias_absolute_native": 0.02,
+    "surface_alias_relative": 0.01
+  },
+  "solver": {
+    "lm": 0.0001,
+    "ep": 0.1,
+    "primary": "native"
+  },
+  "surface_evidence": {
+    "minimum_angle_degrees": 15,
+    "visibility_absolute_native": 0.02,
+    "visibility_relative": 0.01,
+    "minimum_free_views": 2,
+    "minimum_support_views": 2
+  }
+}

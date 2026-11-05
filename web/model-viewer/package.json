@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@mkkellogg/gaussian-splats-3d": "0.4.7",
+    "esbuild": "0.25.12",
+    "three": "0.170.0"
+  }
+}

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer"><title>整体模型 · TopologyBIM</title>
+<link rel="stylesheet" href="/model-assets/viewer.css">
+</head>
+<body>
+<header><a class="brand" href="/">T<span>TopologyBIM</span></a><span class="divider"></span><span>模型查看器</span><span class="private">本地保存</span></header>
+<main>
+ <aside>
+  <div class="eyebrow">PHONE SCAN / 01</div><h1>整体重建模型</h1>
+  <p class="intro">从任意角度，看看这次扫描建立的空间。</p>
+  <label class="field">已保存的扫描<select id="runs" aria-label="选择已保存的扫描" disabled><option>正在读取…</option></select></label>
+  <div class="stats"><div><b id="count">—</b><span>高斯点</span></div><div><b id="cameras">—</b><span>保存视角</span></div></div>
+  <div class="label">显示方式</div>
+  <div class="segmented"><button id="appearance" aria-pressed="false" disabled>高斯外观</button><button id="points" class="selected" aria-pressed="true" disabled>点云结构</button></div>
+  <div class="label">观察视角</div>
+  <div class="viewbuttons"><button id="overview" disabled>整体视角</button><button id="top" disabled>俯视</button><button id="front" disabled>正面</button><button id="full" disabled>包含远处点</button></div>
+  <label class="check"><input id="path" type="checkbox" checked disabled><span>显示拍摄轨迹</span><i></i></label>
+  <label class="check"><input id="rotate" type="checkbox" disabled><span>自动旋转</span></label>
+  <div class="rangehead"><label for="scale">高斯大小</label><output id="scaleValue">100%</output></div>
+  <input id="scale" type="range" min="0.1" max="1.5" step="0.05" value="1" disabled>
+  <label class="field background">背景<select id="background"><option value="#121b22">深色</option><option value="#e4e9ec">浅色</option></select></label>
+  <div class="notice"><span class="dot"></span><div>这是本轮实际保存的模型。空洞、拉伸和漂浮点也会显示。单目结果为相对尺度。</div></div>
+  <button id="download" class="download" disabled>↓ 下载原始 PLY <span id="fileSize"></span></button>
+  <details><summary>模型说明</summary><p id="modelNote"></p><p>青色线连接保存的相机位置，并非经过独立验证的真实轨迹。整体视角对准主体；“包含远处点”可查看最远的漂浮点。</p></details>
+ </aside>
+ <section class="workspace" aria-label="交互三维模型">
+  <div id="viewport"></div>
+  <div class="viewtitle"><span class="live-dot"></span><b id="viewName">整体视角</b><span id="modeBadge">3D GAUSSIANS</span></div>
+  <button id="fullscreen" class="floating" aria-label="切换全屏">⛶ 全屏</button>
+  <div id="loading" class="loading" role="status"><div class="loader"></div><strong id="loadingTitle">正在打开模型</strong><p id="loadingMessage">读取这台电脑上保存的扫描…</p><progress id="progress" max="100" value="0"></progress><button id="retry" hidden>重新加载</button></div>
+  <form id="auth" hidden><h2>打开你的扫描</h2><p>粘贴原来的完整手机测试链接，即可读取已保存的模型。</p><input id="access" type="password" autocomplete="off" aria-label="完整手机测试链接或访问码" placeholder="完整手机测试链接或访问码" required><button>打开模型</button><p id="authError" role="alert"></p></form>
+  <div class="interaction">拖动旋转 <span>·</span> 滚轮缩放 <span>·</span> 右键平移<span class="mobilehelp"> / 双指缩放与平移</span></div>
+  <div class="filmstrip"><div class="striphead"><span>沿拍摄视角查看</span><span>点击进入对应位置</span></div><div id="presets"></div></div>
+ </section>
+</main>
+<script type="module" src="/model-assets/viewer.js"></script>
+</body></html>

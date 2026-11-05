@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MASt3R-SLAM · 样例测试</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#111b23;color:#ecf2f6;font:15px/1.6 system-ui,sans-serif}header{position:absolute;z-index:2;top:20px;left:24px;max-width:460px;background:#172631ed;padding:18px 22px;border:1px solid #344958;border-radius:12px}h1{font-size:22px;margin:0 0 5px}p{margin:5px 0;color:#adbec9}button,a{font:inherit;color:#d6f4ee;background:#263e4d;border:1px solid #48616e;border-radius:7px;padding:6px 12px;cursor:pointer;text-decoration:none}nav{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}label{margin-right:12px}#status{color:#89dfc9}footer{position:absolute;bottom:12px;left:24px;color:#adbec9;pointer-events:none}canvas{display:block;width:100vw;height:100vh}input[type=range]{width:105px;vertical-align:middle}@media(max-width:600px){header{top:10px;left:10px;right:10px;padding:12px}h1{font-size:18px}}
+</style>
+<header><h1>MASt3R-SLAM 原始点云</h1><p>固定房间 RGB 样例 · 本机 RTX 4070 测试</p><div id="status" role="status">正在读取模型…</div>
+<nav><button id="overview">整体视角</button><button id="top">俯视</button><button id="full">全范围</button><a href="../native/model.ply" download>下载 PLY</a></nav>
+<label><input id="path" type="checkbox" checked>关键帧轨迹</label><label>点大小 <input id="size" type="range" min="0.5" max="4" value="1" step="0.25"></label>
+<p>显示所有导出的点；初始视角对准主体。“全范围”包含最远点。轨迹来自算法估计。</p></header>
+<footer>拖动旋转 · 滚轮缩放 · 右键平移</footer>
+<script type="module" src="./mast3r.js"></script></html>

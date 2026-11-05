@@ -1,0 +1,1 @@
+Print checkerboard-a4-25mm.pdf on A4 paper at 100% scale. Verify that four square edges span 100 mm. Keep the board flat. Capture approximately 30 sharp views at different positions, tilts and distances with the rear camera, a fixed 1x lens and the scan orientation. The calibration page reports the held-out fit and saves the accepted profile.

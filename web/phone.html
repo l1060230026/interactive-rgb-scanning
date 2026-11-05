@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#101a1d">
+<title>TopologyBIM · Spatial Capture</title>
+<style>
+:root{color-scheme:light;--bg:#f5f7f8;--panel:#fff;--raised:#eef3f3;--line:#e0e7e9;--ink:#26383e;--muted:#8c9a9f;--accent:#267d76;--accent-ink:#fff;--warning:#b68b48;--danger:#c37164;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;background:var(--bg);color:var(--ink);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;padding:0 0 112px}button,input,select{font:inherit}button,a,input,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:default;opacity:.38}[hidden]{display:none!important}button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #65a89b;outline-offset:4px}a{color:var(--accent);text-underline-offset:4px}svg{display:block;flex-shrink:0}p{line-height:1.7}h1,h2,h3,p{margin:0}button{border:0}canvas{display:none}
+.app{width:min(1140px,calc(100% - 64px));margin:auto}.app-header{display:flex;align-items:center;justify-content:space-between;padding:30px 0 26px;gap:16px}.identity{display:flex;align-items:center;gap:12px}.brand-icon{display:grid;place-items:center;width:39px;height:43px;color:var(--accent)}.brand-icon svg{width:32px;height:32px}.eyebrow{color:#85989a;font-size:9px;letter-spacing:2px;line-height:1.7;font-weight:550}.identity h1{font-size:23px;letter-spacing:-.6px;font-weight:600}.header-actions{display:flex;align-items:center;gap:12px}.connection-pill{font-size:10px;color:#8b999e;display:flex;align-items:center;gap:6px;white-space:nowrap}.connection-pill i{width:5px;height:5px;border-radius:50%;background:#a5b1b3}.connection-pill[data-state=ready] i{background:#5d9e85}.connection-pill[data-state=busy] i{background:#b58c53}.connection-pill[data-state=error] i{background:var(--danger)}.icon-button{display:grid;place-items:center;width:38px;height:38px;border:1px solid #e0e7e8;border-radius:10px;background:white;color:#698382}.icon-button:hover,.quiet-button:hover{background:#eaf2ef}
+.workspace{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,.8fr);gap:28px;align-items:start}.stage{min-width:0}.stage-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}.stage-title{font-size:12px;font-weight:550;display:flex;gap:8px;align-items:center;color:#5d7378}.stage-title i{width:5px;height:5px;background:#89ada0;border-radius:50%}.view-tabs{display:flex;border:1px solid #e0e7e8;border-radius:9px;background:#eaf0f1;padding:3px;gap:2px}.view-tabs button{font-size:11px;color:#8a9a9e;padding:7px 13px;border-radius:6px;background:transparent;min-height:34px}.view-tabs button[aria-pressed=true]{background:white;color:#336c65;box-shadow:0 1px 3px #3148420b}.videos{position:relative}.card{min-width:0}.videos[data-view=local] .return-card,.videos[data-view=remote] .local-card{display:none}.screen{width:100%;background:#15262b;aspect-ratio:3/4;max-height:650px;min-height:260px;border:1px solid #22363c;border-radius:17px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}.screen video{width:100%;height:100%;object-fit:contain;position:absolute;inset:0}.empty{position:relative;z-index:1;display:flex;align-items:center;flex-direction:column;gap:13px;color:#92aaa9;text-align:center;padding:26px;pointer-events:none}.empty svg{color:#73a497;margin-bottom:12px}.empty strong{font-size:17px;font-weight:450;color:#d1dfdb;letter-spacing:.3px}.empty small{font-size:11px;line-height:1.9;color:#779590}.screen[data-ready=true] .empty{display:none}.frame-corner{position:absolute;width:19px;height:19px;border-color:#567a78;border-style:solid;z-index:2;pointer-events:none;opacity:.7}.frame-corner.tl{top:18px;left:18px;border-width:1px 0 0;border-radius:5px 0 0}.frame-corner.tr{top:18px;right:18px;border-width:1px 1px 0 0;border-radius:0 5px 0 0}.frame-corner.bl{bottom:18px;left:18px;border-width:0 0 1px 1px;border-radius:0 0 0 5px}.frame-corner.br{bottom:18px;right:18px;border-width:0 1px 1px 0;border-radius:0 0 5px}.viewport-badge{position:absolute;top:19px;left:20px;display:flex;gap:7px;align-items:center;color:#90b0ac;font-size:9px;letter-spacing:1px;z-index:3;pointer-events:none}.viewport-badge i{height:4px;width:4px;border-radius:50%;background:#79a596}.app[data-ui-connected=true] .viewport-badge i{background:#b6e5cd}.screen:has(.viewport-badge) .frame-corner.tl{top:51px}.frame-footer{position:absolute;bottom:0;left:0;right:0;padding:13px 18px;color:#b3cac3;font-size:10px;background:#0e1e24bd;backdrop-filter:blur(6px);z-index:3;line-height:1.6;pointer-events:none}.screen[data-ready=false] .frame-footer{display:none}
+.equipment-line{min-height:41px;display:flex;gap:8px;align-items:center;width:100%;padding:10px 2px;background:transparent;color:#8d9da0;font-size:11px;text-align:left}.equipment-line .arrow{margin-left:auto;color:#899e9c}.equipment-line .lens{color:#5e7479}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);overflow:hidden}.metric{padding:15px 9px;min-width:0}.metric+.metric{border-left:1px solid var(--line)}.metric span{font-size:10px;color:#9aa7ab;white-space:nowrap}.metric b{font-family:ui-monospace,"SFMono-Regular",Consolas,monospace;font-size:19px;font-weight:450;display:block;margin-top:7px;letter-spacing:-.5px;white-space:nowrap;color:#557b7c}
+.sidebar{display:grid;gap:15px;padding-top:49px}.session-card,.calibration,.help-card,.echo-card{background:var(--panel);border:1px solid #e1e8e8;border-radius:13px;padding:21px}.section-kicker{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.section-kicker h2{font-size:12px;font-weight:550}.small-label{font-size:9px;color:#90a19f;background:#f0f5f3;padding:4px 6px;border-radius:4px;max-width:65%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.session-meta{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.phase-title{font-size:20px;font-weight:500;letter-spacing:-.3px}.timer{font-family:ui-monospace,"SFMono-Regular",Consolas,monospace;font-size:21px;font-weight:400;color:#71968a;font-variant-numeric:tabular-nums}.hint{font-size:11px;line-height:1.9;color:#8c9c9f;overflow-wrap:anywhere;white-space:pre-wrap}.session-facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid #edf0f1;margin-top:18px;padding-top:15px}.session-facts span{display:block;color:#a1adb0;font-size:9px;margin-bottom:7px}.session-facts b{font-size:13px;font-weight:450;color:#647b7d}.status{font-size:11px;line-height:1.8;color:#8ea2a1;white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0 0}.status:empty{display:none}.status.error{color:#b56d5d;padding:10px 12px;background:#fff7f3;border:1px solid #f0dfd6;border-radius:8px}.preview-notice{display:none}.controls{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}.button-secondary,.secondary{min-height:40px;display:inline-flex;justify-content:center;align-items:center;gap:7px;border:1px solid #dce7e5;border-radius:8px;background:white;color:#6f8d88;padding:9px 12px;font-size:11px}.button-secondary:hover,.secondary:hover{background:#eef5f1}.model-link{width:100%;text-align:left;background:#fff;border:1px solid #dfe8e6;border-radius:10px;padding:15px;color:#557d73;font-size:11px;display:flex;align-items:center;gap:10px}.model-link svg:last-child{margin-left:auto}.help-card{padding:0 17px;background:transparent;border-color:#e0e8e8}.help-card summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:15px 0;color:#8e9f9f;font-size:11px}.help-card summary::-webkit-details-marker{display:none}.help-card .help-content{padding:0 0 17px;font-size:11px;color:#91a3a1}.legend{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}.legend span{display:flex;align-items:center;gap:6px;font-size:10px;color:#819791}.swatch{width:7px;height:7px;border-radius:2px;background:#d77e70}.swatch.blue{background:#6c9fc7}.privacy{display:flex;align-items:start;gap:7px;font-size:9px;color:#a8b5b4;line-height:1.8;padding:1px 2px}.privacy svg{margin-top:3px}
+.dock{position:fixed;z-index:8;bottom:16px;left:50%;transform:translateX(-50%);width:min(1140px,calc(100% - 64px));display:flex;align-items:center;gap:10px;padding:14px 20px;border:1px solid #e1e9e6;border-radius:13px;background:#fffffff2;backdrop-filter:blur(18px);box-shadow:0 4px 28px #233d3520}.dock-info{margin-right:auto;min-width:0}.dock-info strong{display:block;font-size:12px;font-weight:550;color:#4c6667}.dock-info span{display:block;margin-top:5px;color:#9aabaa;font-size:10px}.primary{min-height:44px;padding:11px 22px;border-radius:9px;color:#fff;background:#267d76;font-size:12px;font-weight:500}.primary:hover:not(:disabled){background:#216d67}.dock-mode-link{background:transparent;color:#91a6a0;font-size:10px;padding:8px}.dock #start:disabled,.dock #scanStart:disabled,.dock #scanStop:disabled,.dock #stop:disabled{display:none}.dock #stop{font-size:10px;border-color:transparent;padding:8px}.dock #scanStop{background:#386761}.app[data-mode=scan] .echo-card{display:none}.app[data-mode=echo] .session-card,.app[data-mode=calibration] .session-card,.app[data-mode=calibration] .echo-card{display:none}
+.calibration h2,.echo-card h2{font-size:14px;font-weight:550;margin-bottom:15px}.calibration p,.echo-card p{font-size:11px;color:#90a29e;line-height:1.85;margin:11px 0}.calibration h3{font-size:11px;font-weight:500;margin:18px 0 10px}.calibration img{width:100%;border-radius:7px;border:1px solid var(--line)}.materials{display:flex;gap:8px;flex-wrap:wrap;font-size:10px;margin-bottom:15px}.materials a{padding:7px 9px;border:1px solid var(--line);border-radius:6px;text-decoration:none}.confirm{display:flex;gap:8px;align-items:flex-start;margin:12px 0;font-size:11px;color:#7f9591}.confirm input{accent-color:var(--accent)}.square-label{display:flex;gap:7px;align-items:center;font-size:11px;color:#7d9490}.square-input{width:65px;padding:7px;background:#f9fbfa;border:1px solid var(--line);border-radius:6px;color:var(--ink)}progress{width:100%;height:4px;accent-color:var(--accent)}.note{font-size:11px;line-height:1.8;color:#8da19b}
+dialog{width:min(510px,calc(100% - 28px));max-height:86dvh;padding:24px;border:1px solid #dce7e3;border-radius:18px;background:white;color:var(--ink);box-shadow:0 20px 100px #132e3030}dialog::backdrop{background:#10282e65;backdrop-filter:blur(5px)}.sheet-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:23px}.sheet-header h2{font-size:20px;margin-top:4px;font-weight:550}.setup{display:grid;gap:14px}.setup label{display:grid;gap:8px;font-size:11px;color:#809791}.setup select{width:100%;padding:12px;border:1px solid #dfe8e4;border-radius:9px;background:#f9fbfa;color:#4c6862;font-size:12px}.settings-hint,.profile-info,.camera-info,.technical-note{font-size:11px;line-height:1.9;color:#95a7a2;overflow-wrap:anywhere}.settings-hint{margin:18px 0}.sheet-info{border-top:1px solid #edf1ee;padding-top:18px;margin-top:18px}.sheet-info h3{font-size:11px;font-weight:550;margin-bottom:8px}.technical-note{font-size:10px;margin-top:8px}
+@media(max-width:760px){body{padding-bottom:105px}.app{width:calc(100% - 36px)}.app-header{padding:19px 0 18px}.identity{gap:8px}.brand-icon{width:30px;height:35px}.brand-icon svg{width:29px;height:29px}.identity h1{font-size:19px}.eyebrow{font-size:8px;letter-spacing:1.7px}.header-actions{gap:12px}.icon-button{width:35px;height:35px;border-radius:9px}.connection-pill{font-size:9px;gap:5px}.workspace{grid-template-columns:1fr;gap:9px}.stage-bar{margin-bottom:12px}.stage-title{font-size:10px}.view-tabs button{font-size:10px;min-height:30px;padding:6px 11px}.screen{aspect-ratio:3/4;max-height:52dvh;min-height:300px;border-radius:14px}.empty svg{width:43px;height:43px}.empty strong{font-size:15px}.empty small{font-size:10px}.viewport-badge{font-size:8px;top:16px;left:17px}.equipment-line{min-height:36px;padding:8px 1px;font-size:10px}.metrics{display:none}.sidebar{padding-top:0;gap:11px}.session-card{padding:14px 15px;border-radius:10px}.section-kicker{display:none}.session-meta{margin-bottom:8px;gap:10px}.phase-title{font-size:13px;font-weight:500}.timer{font-size:16px;color:#7c9d91}.hint{font-size:10px;line-height:1.85}.session-facts{display:none}.model-link{padding:12px 14px;font-size:10px}.help-card{border:0;border-top:1px solid var(--line);border-radius:0;padding:0 2px}.help-card summary{padding:12px 0;font-size:10px}.privacy{font-size:8px;line-height:1.8;padding:0 1px}.dock{width:100%;bottom:0;left:0;transform:none;border-radius:0;border-width:1px 0 0;box-shadow:0 -3px 22px #204b3d06;padding:13px 18px calc(13px + env(safe-area-inset-bottom));gap:8px}.dock-info strong{font-size:11px}.dock-info span{font-size:9px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dock-mode-link{display:none}.primary{min-height:43px;padding:11px 20px;font-size:11px}.dock #stop{min-height:35px;font-size:9px;padding:7px}.calibration{padding:17px}.sidebar .status:empty{display:none}}
+@media(max-width:370px){.app{width:calc(100% - 28px)}.header-actions{gap:7px}.connection-pill{font-size:8px}.identity h1{font-size:18px}.screen{min-height:275px}.primary{padding:11px 14px}}
+@media(orientation:landscape) and (max-height:550px){.workspace{grid-template-columns:minmax(0,1.3fr) minmax(240px,1fr)}.screen{aspect-ratio:4/3;max-height:60dvh;min-height:190px}.app-header{padding:12px 0}.dock{position:relative;left:auto;transform:none;bottom:auto;margin-top:20px;width:100%}body{padding-bottom:24px}.app{width:calc(100% - 36px)}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media(max-width:700px){html{scrollbar-width:none}html::-webkit-scrollbar{display:none}}
+</style>
+</head>
+<body>
+<main id="main" class="app" data-mode="scan" data-ui-connected="false" data-ui-running="false" data-ui-connecting="false">
+ <header class="app-header">
+  <div class="identity"><div class="brand-icon" aria-hidden="true"><svg width="27" height="27" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M10 4H5a1 1 0 0 0-1 1v5m14-6h5a1 1 0 0 1 1 1v5M4 18v5a1 1 0 0 0 1 1h5m8 0h5a1 1 0 0 0 1-1v-5"/><path d="m14 8 6 3.5v7L14 22l-6-3.5v-7L14 8Z"/><path d="m8 11.5 6 3.5 6-3.5M14 15v7"/></svg></div><div><div class="eyebrow">TOPOLOGYBIM</div><h1>Spatial Capture</h1></div></div>
+  <div class="header-actions"><span id="connectionPill" class="connection-pill" data-state="idle"><i aria-hidden="true"></i><span id="connectionLabel">Offline</span></span><button id="settingsOpen" class="icon-button" type="button" aria-label="Camera and calibration settings" title="Camera and calibration settings"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="#ffffff"/><circle cx="15" cy="17" r="3" fill="#ffffff"/></svg></button></div>
+ </header>
+ <div class="workspace">
+  <section class="stage" aria-label="Scanning view">
+   <div class="stage-bar"><span class="stage-title"><i aria-hidden="true"></i><span id="viewLabel">Camera view</span></span><div class="view-tabs" role="group" aria-label="Switch view"><button id="showLocal" type="button" aria-pressed="true">Camera</button><button id="showRemote" type="button" aria-pressed="false">Feedback</button></div></div>
+   <div id="videoViews" class="videos" data-view="local">
+    <section class="card local-card" aria-label="Current camera view"><div class="screen" id="localScreen" data-ready="false"><div class="empty"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M17 13 20 8h8l3 5h7a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4V17a4 4 0 0 1 4-4h7Z"/><circle cx="24" cy="26" r="9"/><path d="M35 20h2"/></svg><strong>Capture your space in 3D</strong><small>Connect the calibrated rear camera<br>Portrait orientation · 1× lens</small></div><video id="local" muted playsinline aria-label="Live camera preview"></video><span class="frame-corner tl"></span><span class="frame-corner tr"></span><span class="frame-corner bl"></span><span class="frame-corner br"></span><span class="viewport-badge"><i></i> CAMERA · RGB</span><div class="frame-footer">Live camera view</div></div></section>
+    <section class="card return-card" aria-label="Processed workstation view"><div class="screen" id="remoteScreen" data-ready="false"><div class="empty"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><rect x="5" y="7" width="38" height="28" rx="4"/><path d="M17 42h14m-7-7v7M18 18l6-4 6 4v8l-6 4-6-4v-8Zm0 0 6 4 6-4m-6 4v8"/></svg><strong id="remoteEmptyTitle">Waiting for workstation</strong><small id="remoteEmptyHint">Connect the camera to view the stream<br>Start scanning to receive spatial feedback</small></div><video id="remote" muted playsinline aria-label="Returned workstation video"></video><span class="frame-corner tl"></span><span class="frame-corner tr"></span><span class="frame-corner bl"></span><span class="frame-corner br"></span><span class="viewport-badge"><i></i> LIVE · FEEDBACK</span><div id="returnTitle" class="frame-footer">Received camera view (scan not started)</div></div></section>
+   </div>
+   <button id="lensSettings" type="button" class="equipment-line" aria-label="Camera and calibration settings"><svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><rect x="2" y="5" width="16" height="12" rx="3"/><path d="m6 5 2-3h4l2 3"/><circle cx="10" cy="11" r="3"/></svg><span id="lensSummary" class="lens">Rear camera · 1× · portrait</span><span class="arrow">Settings ›</span></button>
+   <div class="metrics" aria-label="Connection and processing metrics"><div class="metric"><span id="videoRttLabel">Processing time</span><b id="videoRtt">—</b></div><div class="metric"><span>Return FPS</span><b id="fps">—</b></div><div class="metric"><span>Network RTT</span><b id="dataRtt">—</b></div></div>
+   <div id="status" class="status" role="status">Connect the calibrated rear camera, then start scanning.</div>
+  </section>
+  <aside class="sidebar" aria-label="Scan status and help">
+   <section id="scanPanel" class="session-card">
+    <div class="section-kicker"><h2>Current session</h2><span id="backendLabel" class="small-label">Loading configuration</span></div>
+    <div class="session-meta"><div id="scanPhaseTitle" class="phase-title">Ready</div><span id="sessionTimer" class="timer" aria-label="Session duration">00:00</span></div>
+    <div id="scanStatus" class="hint" role="status">Connect the camera, then select Start scan. Each session creates a new scene.</div>
+    <p id="recordingStatus" class="note" role="status"></p>
+    <p id="feedbackStats" class="status" hidden></p>
+    <div class="session-facts"><div><span>Processed frames</span><b id="processedFrames">—</b></div><div><span>Mapping views</span><b id="mappedViews">—</b></div></div>
+    <div id="scanDownloads" class="controls" hidden><button id="downloadModel" class="secondary" type="button">Export PLY</button><button id="downloadScanSummary" class="secondary" type="button">Scan record</button><button id="downloadCameraVideo" class="secondary" type="button" hidden>Camera video</button><button id="downloadFeedbackVideo" class="secondary" type="button" hidden>Feedback video</button></div>
+   </section>
+   <section class="preview-notice" id="previewNotice"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M10 9v5m0-8v.5"/></svg><div><strong id="feedbackNoticeTitle">Loading scan configuration</strong><p id="scanRenderNote">Connect to view reconstruction and feedback status.</p></div></section>
+   <section id="calibrationPanel" class="calibration" hidden>
+    <h2>Camera calibration</h2><div class="materials"><a href="/calibration/board.pdf" target="_blank" rel="noopener">Download A4 board</a><a href="/calibration/instructions.txt" target="_blank" rel="noopener">Print and capture guide ↗</a></div>
+    <p>Print A4 landscape at actual size. Use a 10×7 board with 25 mm squares; verify 100 mm across four squares and mount flat.</p>
+    <label class="square-label">Measured square size <input id="squareMm" class="square-input" type="number" min="10" max="50" step="0.1" value="25"> mm</label>
+    <label class="confirm"><input id="printVerified" type="checkbox"><span>Print dimensions checked; board flat; rear camera selected.</span></label>
+    <p><span id="calibrationCount">0 / 30 images</span> · 20 minimum, 40 maximum</p><progress id="calibrationProgress" value="0" max="30"></progress>
+    <div id="calibrationHint" class="hint" role="status">Select Start capture. Clear calibration images with varied viewpoints are saved.</div>
+    <div class="controls"><button id="calibrationStart" class="secondary" disabled>Start capture</button><button id="calibrationPause" class="secondary" disabled>Pause capture</button><button id="calibrationSolve" class="secondary" disabled>Calibrate</button></div>
+    <p>Keep the full board visible. Vary position, distance and tilt; hold steady for 1–2 seconds per view. Calibrate at 30 images.</p>
+    <div id="calibrationResult" hidden><p id="calibrationSummary"></p><div class="controls"><button id="downloadCalibration" class="secondary">Export JSON</button><button id="downloadIntrinsics" class="secondary">Rectified intrinsics</button></div></div>
+    <h3 id="cornersHeading" hidden>Latest detected corners</h3><img id="cornersImage" hidden alt="Calibration board and detected corners">
+    <h3 id="previewHeading" hidden>Distortion check: received image (left), rectified image (right)</h3><img id="undistortionImage" hidden alt="Distortion correction comparison">
+   </section>
+   <section class="echo-card"><h2>Video test</h2><p class="note">Check the video connection and round-trip delay. This mode performs no reconstruction and records no input video.</p></section>
+   <div><button id="openModelViewer" class="model-link" type="button"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="m10 2 7 4v8l-7 4-7-4V6l7-4Zm-7 4 7 4 7-4m-7 4v8"/></svg>Open reconstruction workspace<svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10"/></svg></button></div>
+   <details class="help-card"><summary>Scanning and feedback <span>＋</span></summary><div class="help-content"><p>Use the calibrated lens at 1× in portrait orientation. Hold steady during initialization, then move slowly with overlapping views.</p><p style="margin-top:10px"><span id="feedbackLegendIntro">Feedback legend:</span></p><div class="legend"><span><i class="swatch"></i><span id="redLegend">Red: low observation support</span></span><span><i class="swatch blue"></i><span id="blueLegend">Blue hatching: unscored</span></span></div><p id="reminderLegend" hidden>Light contours: observed but unresolved. You may continue to other regions.</p><p>Choose where to move and aim the camera as scanning proceeds.</p><p style="margin-top:10px">Processing time excludes camera exposure, upload, return transmission and display. Video round-trip time is measured in video-test mode.</p></div></details>
+   <p class="privacy"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg><span id="recordingPrivacy">Calibration saves selected board images. Connect to view this session’s recording and duration settings.</span></p>
+  </aside>
+ </div>
+ <footer class="dock" aria-label="Capture controls"><div class="dock-info"><strong id="dockTitle">Connect camera to begin</strong><span id="dockHint">Calibrated camera · 1× · portrait</span></div><button id="modePanelLink" class="dock-mode-link" type="button">Capture panel ↑</button><button id="stop" class="secondary" type="button" disabled>Disconnect</button><button id="start" class="primary" type="button">Connect camera</button><button id="scanStart" class="primary" type="button" disabled>Start scan</button><button id="scanStop" class="primary" type="button" disabled>Finish & save</button></footer>
+ <canvas id="outgoing"></canvas><canvas id="readback"></canvas>
+</main>
+<dialog id="settingsDialog" aria-labelledby="settingsTitle">
+ <div class="sheet-header"><div><div class="eyebrow">CAMERA SETTINGS</div><h2 id="settingsTitle">Camera settings</h2></div><button id="settingsClose" class="icon-button" type="button" aria-label="Close settings"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><path d="m5 5 10 10M15 5 5 15"/></svg></button></div>
+ <div class="setup"><label>Mode<select id="captureMode"><option value="scan">Online reconstruction</option><option value="calibration">Camera calibration</option><option value="echo">Video test</option></select></label><label>Camera lens<select id="cameraSelect"><option value="">Auto rear camera (identified on connection)</option></select></label><button id="loadCameras" class="secondary" type="button">Refresh cameras</button></div>
+ <p class="settings-hint">Scanning uses the calibrated rear camera. Keep the same lens, zoom and orientation while connected.</p>
+ <div class="sheet-info"><h3>Saved calibration</h3><p id="scanProfile" class="profile-info">Loading camera calibration…</p></div>
+ <div class="sheet-info"><h3>Capture settings</h3><p id="cameraInfo" class="camera-info">Connect to view camera dimensions, lens and frame rate.</p><p id="capturePath" class="technical-note">Phone camera → workstation → spatial feedback</p></div>
+</dialog>
+
+<script src="/sdk.js"></script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const fragmentKey=new URLSearchParams(location.hash.slice(1)).get('key');
+const pathKey=location.pathname.startsWith('/join/')?decodeURIComponent(location.pathname.slice(6)):'';
+let storedKey='';try{storedKey=sessionStorage.getItem('phone-test-key')||'';}catch(_){}
+let accessKey=fragmentKey||pathKey||storedKey;
+if(accessKey){
+ try{sessionStorage.setItem('phone-test-key',accessKey);}catch(_){}
+ // Keep a complete transferable link when opened on another device or tab.
+ if(fragmentKey||(!pathKey&&storedKey))history.replaceState(null,'','/join/'+encodeURIComponent(accessKey));
+}
+let room=null,camera=null,outgoingTrack=null,sessionId=null,drawTimer=null,pingTimer=null,statusTimer=null;
+let active=false,ending=false,receivedFrames=0,videoRtts=[],dataRtts=[],fpsStart=0,fpsFrames=0,remoteGeneration=0;
+let stage='idle',lastFailure=null;
+let currentMode='scan',calibration=null,calibrationBusy=false,lastCornerCount=-1,lastCalibrationId=null;
+let cameraDimensions=null,cornerImageUrl=null,previewImageUrl=null;
+let cameraReady=false,calibrationError='';
+let scanProfile=null,scan=null,scanBusy=false,scanError='';
+const errors=[];
+function say(text,error=false){$('status').textContent=text;$('status').className='status'+(error?' error':'');}
+function diagnostic(event,error=null){
+ const video=$('local');
+ const data={event,stage,name:error?.name||'',message:error?.message||'',browser:navigator.userAgent,visibility:document.visibilityState,local:{width:video.videoWidth,height:video.videoHeight,readyState:video.readyState,paused:video.paused,trackState:camera?.mediaStreamTrack.readyState||'none'}};
+ fetch('/api/diagnostic',{method:'POST',headers:{'Authorization':'Bearer '+accessKey,'Content-Type':'application/json'},body:JSON.stringify(data),keepalive:true}).catch(()=>{});
+}
+function setStage(value){stage=value;diagnostic('progress');}
+function waitForCameraFrame(video){
+ // Track.attach() owns playback, including its deferred Safari srcObject reset.
+ // Await actual pixels instead of a second play() promise that reset can abort.
+ return new Promise((resolve,reject)=>{
+  let timer;
+  const events=['loadeddata','playing','resize'];
+  const cleanup=()=>{clearTimeout(timer);events.forEach(event=>video.removeEventListener(event,ready));};
+  const ready=()=>{if(video.readyState>=2&&video.videoWidth>0&&video.videoHeight>0){cleanup();resolve();}};
+  events.forEach(event=>video.addEventListener(event,ready));
+  timer=setTimeout(()=>{cleanup();const error=new Error('No camera frame became available');error.name='CameraPreviewTimeout';reject(error);},15000);
+  ready();
+ });
+}
+function median(items){const a=items.slice().sort((a,b)=>a-b);return a.length?a[Math.floor(a.length/2)]:null;}
+async function api(path,method='GET',body){
+ const response=await fetch('/api/'+path,{method,headers:{'Authorization':'Bearer '+accessKey,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+ if(!response.ok){const e=new Error(await response.text());e.status=response.status;throw e;}
+ return response.json();
+}
+function hasSurfaceReminders(representation){return ['native_confidence_with_reminder','native_surfaces_with_observation_evidence'].includes(representation);}
+function uiMessage(value){
+ const messages={
+  '后置相机':'Rear camera',
+  '定位或画面同步暂不稳定，区域提示已暂停。':'Tracking or frame alignment is unstable. Spatial feedback is paused.',
+  '部分区域已补拍但仍不确定，已减弱提示，可继续扫描其他区域。':'Observed but unresolved regions use light contours. Continue to other regions.',
+  '高亮区域可补充拍摄。':'Adjust the viewpoint to observe highlighted regions.',
+  '蓝色区域尚缺模型覆盖。':'Blue regions need more observations for model coverage.',
+  '正在建立初始点图，先平稳握持手机。':'Initializing reconstruction. Hold the phone steady.',
+  '跟踪暂时中断，区域提示已暂停；请先稳住手机。':'Tracking interrupted. Spatial feedback is paused; hold the phone steady.',
+  '请让整个棋盘进入画面，移动后停稳一下。':'Keep the full board visible and hold steady after moving.',
+  '画面尺寸发生变化，请结束连接、固定方向后重新标定。':'Image dimensions changed. Disconnect, lock orientation and recalibrate.',
+  '收到的尺寸与发送设置不一致，请重新连接。':'Image dimensions do not match the capture settings. Reconnect.',
+  '未识别完整棋盘：请露出全部 10×7 格，避免反光、遮挡或过小。':'Full board not detected. Show all 10×7 squares and avoid reflections or occlusion.',
+  '棋盘太靠近画面边缘，请稍微移回一点。':'Move the board slightly away from the image edge.',
+  '棋盘偏小或不够清晰，请靠近、停稳并增加照明。':'Move closer, hold steady and improve lighting.',
+  '这个角度已经采集，请改变位置、距离或倾斜角度。':'This viewpoint is already captured. Change position, distance or tilt.',
+  '已采满 40 张，请计算标定。':'40 images captured. Select Calibrate.',
+  '标定检查通过，参数和去畸变预览已保存。请保持相同镜头、方向和采集设置。':'Calibration passed and saved. Keep the same lens, orientation and capture settings.',
+  '误差或参数稳定性尚未通过，请继续补拍边缘、远近和倾斜视角后重新计算。':'Calibration needs more diverse views. Capture board edges, distances and tilts, then recalibrate.',
+  '计算未完成，请稍后重试。':'Calibration did not complete. Please try again.'
+ };
+ const text=String(value??'');
+ if(messages[text])return messages[text];
+ const saved=text.match(/^已保存 (\d+) 张/);
+ if(saved)return saved[1]+' images saved. '+(text.includes('计算标定')?'Select Calibrate to check the result.':'Vary position and include tilted views.');
+ return text;
+}
+function setConfigurationLocked(locked){['captureMode','cameraSelect','loadCameras'].forEach(id=>$(id).disabled=locked);}
+function updateMode(){
+ const mode=$('captureMode').value;$('main').dataset.mode=mode;
+ $('calibrationPanel').hidden=mode!=='calibration';$('scanPanel').hidden=mode!=='scan';
+ $('videoRttLabel').textContent=mode==='scan'?'Processing time':mode==='calibration'?'Camera calibration':'Video round-trip time';
+ $('capturePath').textContent=mode==='scan'?'Phone camera → local network → online reconstruction → spatial feedback':mode==='calibration'?'Phone camera → local network → calibration images → camera calibration':'Phone camera → local network → workstation → phone display';
+ $('returnTitle').textContent=mode==='scan'?'Received camera view (scan not started)':'Workstation view';
+ if(mode==='scan'&&accessKey)void loadScanProfile();
+}
+async function loadScanProfile(){
+ try{scanProfile=await api('scan/profile');}
+ catch(error){scanProfile={ready:false,message:error.status===401?'Open the original camera link with its access key.':'Camera calibration is unavailable. Please try again.'};}
+ $('scanProfile').textContent=scanProfile.ready?((scanProfile.backend_label?scanProfile.backend_label+' · ':'')+'Calibrated: '+uiMessage(scanProfile.label)+' · '+scanProfile.image_size.join('×')+' · '+scanProfile.zoom+'×'):uiMessage(scanProfile.message);
+ $('scanRenderNote').textContent=scanProfile.feedback_enabled?(hasSurfaceReminders(scanProfile.feedback_representation)?'Blue marks coverage gaps. Change viewpoint for red regions; light contours mark observed but unresolved regions.':'Online feedback is overlaid on the processed image. Red indicates low observation support; blue hatching indicates unavailable scores.'):'Initialization returns a rectified preview; reconstruction then returns the '+(scanProfile.backend==='photo-slam'?'current tracked view':'latest mapped view')+'. Move slowly and keep overlap between images. Reconstruction preview is available; spatial feedback is not enabled.';
+ $('recordingPrivacy').textContent=scanProfile.input_video_recording?'Scanning records camera video, feedback and model history on this workstation. Finish & save to keep the full session. Session limit: '+Math.round(scanProfile.max_seconds/60)+' minutes.':'Input video is not recorded. Ending a scan saves the online model and final feedback image. Session limit: '+Math.round((scanProfile.max_seconds||120)/60)+' minutes.';
+ updateScan(scan);return scanProfile;
+}
+function updateScan(value){
+ scan=value;const phase=value?.phase||'idle',lifecycle=value?.lifecycle||'idle';
+ const available=active&&cameraReady&&currentMode==='scan'&&!scanBusy;
+ const running=['starting','running','stopping'].includes(lifecycle);
+ $('scanStart').disabled=!available||!scanProfile?.ready||running;
+ $('scanStart').textContent=['complete','failed'].includes(lifecycle)?'New scan':'Start scan';
+ $('scanStop').disabled=!available||!['starting','running'].includes(lifecycle);
+ $('scanDownloads').hidden=!value?.model_saved;
+ let message='Connect the camera, then select Start scan. Each session creates a new scene.';
+ if(available&&!value)message='Camera calibration matched. Ready to scan.';
+ if(['starting','loading_models','loading_camera','waiting_frames'].includes(phase))message='Preparing reconstruction. Hold the phone steady.';
+ if(phase==='initializing')message='Initializing: '+(value.keyframes||0)+' mapping views. Move sideways slowly, including textured corners and furniture.';
+ if(phase==='initializing_map')message='Initializing the map. Hold the phone steady until the first reconstruction appears.';
+ if(phase==='mapping'&&value.backend==='mast3r-slam')message=hasSurfaceReminders(value.feedback_representation)?'Reconstructing. Continue toward blue regions and change viewpoint for red regions. You may move on from light contours.':'Reconstructing and updating feedback. Red regions need more observations; blue hatching is unscored.';
+ if(phase==='mapping'&&value.backend!=='mast3r-slam')message='Reconstructing: '+value.frames_processed+' frames processed. Move slowly and keep overlap between images.';
+ if(phase==='stopping'||phase==='saving')message='Saving the online model…';
+ if(phase==='complete')message=value.model_saved?'Model saved. Export it or start a new scene.':'No map was formed. Restart with a slow sideways motion and textured scene features.';
+ if(phase==='failed')message=value.error||'Reconstruction stopped. Disconnect and reconnect to try again.';
+ if(value?.hint&&['initializing','mapping'].includes(phase))message=uiMessage(value.hint);
+ $('scanStatus').textContent=uiMessage(scanError||value?.recording?.error||message);
+ const recording=value?.recording;
+ $('downloadCameraVideo').hidden=$('downloadFeedbackVideo').hidden=recording?.status!=='complete';
+ $('recordingStatus').textContent=recording?.enabled?(recording.status==='complete'?'Recording saved · '+recording.camera_frames+' camera frames':recording.status==='failed'?'Recording stopped: '+recording.error:'Recording camera + feedback · '+recording.camera_frames+' frames'):(scanProfile?.input_video_recording?'Camera video, feedback and model history will be recorded.':'');
+ if(currentMode==='scan'){
+  $('videoRtt').textContent=Number.isFinite(value?.receiver_to_output_ms)?Math.round(value.receiver_to_output_ms)+' ms':'—';
+  $('returnTitle').textContent=['observation_overlay','observation_unknown'].includes(value?.output_kind)?(value.output_kind==='observation_overlay'?(hasSurfaceReminders(value.feedback_representation)?'Blue: coverage gaps · Red: adjust view · Contours: unresolved':'Red: low support · Blue hatching: unscored'):'Tracking unstable; spatial feedback paused'):value?.output_kind==='gaussian_render'?(value.backend==='photo-slam'?'Online model (current view)':'Online model (latest mapped view)'):value?.output_kind==='rectified_input'?'Rectified preview (waiting for tracking)':'Received camera view (scan not started)';
+ }
+}
+async function scanAction(action){
+ if(scanBusy)return;scanError='';scanBusy=true;updateScan(scan);
+ $('scanStatus').textContent=action==='stop'?'Saving the online model…':'Starting a new scan…';
+ try{scan=await api('scan','POST',{session:sessionId,action});}
+ catch(error){scanError=error.message;}
+ finally{scanBusy=false;updateScan(scan);}
+}
+async function downloadScan(kind){
+ try{
+  const response=await fetch('/api/scan/'+kind,{headers:{Authorization:'Bearer '+accessKey}});
+  if(!response.ok)throw new Error(await response.text());
+  const url=URL.createObjectURL(await response.blob()),link=document.createElement('a');
+  link.href=url;link.download=kind==='model'?(scan?.model_kind==='point_cloud'?'mast3r-points.ply':'online-gaussians.ply'):kind==='camera-video'?'camera.mp4':kind==='feedback-video'?'feedback.mp4':'scan-summary.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+ }catch(error){$('scanStatus').textContent=error.message;}
+}
+async function listCameras(selected=''){
+ const devices=(await navigator.mediaDevices.enumerateDevices()).filter(device=>device.kind==='videoinput');
+ const select=$('cameraSelect');select.replaceChildren(new Option('Auto rear camera',''));
+ devices.forEach((device,index)=>select.add(new Option(device.label||('Camera '+(index+1)),device.deviceId)));
+ const wanted=$('captureMode').value==='scan'&&scanProfile?.ready?scanProfile.device_id:selected;
+ if(devices.some(device=>device.deviceId===wanted))select.value=wanted;
+}
+async function loadCameraList(){
+ if(active)return;
+ if(!isSecureContext||!navigator.mediaDevices){say('Open this page over HTTPS in Safari.',true);return;}
+ let stream;$('loadCameras').disabled=true;
+ try{
+  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+  await listCameras(stream.getVideoTracks()[0].getSettings().deviceId);
+  say('Camera list loaded. Select the calibrated rear camera.');
+ }catch(error){say('Camera unavailable: '+error.name+'. Allow camera access.',true);}
+ finally{stream?.getTracks().forEach(track=>track.stop());$('loadCameras').disabled=false;}
+}
+function updateCalibration(value){
+ calibration=value;const count=value?.accepted||0,phase=value?.phase||'idle';
+ const available=active&&cameraReady&&!!sessionId&&currentMode==='calibration'&&!calibrationBusy;
+ $('calibrationCount').textContent=count+' / 30 images';$('calibrationProgress').value=count;
+ $('calibrationHint').textContent=uiMessage(calibrationError||value?.hint||'Select Start capture. Clear calibration images with varied viewpoints are saved.');
+ $('calibrationStart').textContent=phase==='paused'?'Resume capture':'Start capture';
+ $('calibrationStart').disabled=!available||!$('printVerified').checked||!['idle','paused'].includes(phase)||count>=40;
+ $('calibrationPause').disabled=!available||phase!=='collecting';
+ $('calibrationSolve').disabled=!available||count<20||!['collecting','paused'].includes(phase);
+ $('squareMm').disabled=!!value; $('printVerified').disabled=!!value;
+ const result=value?.result;$('calibrationResult').hidden=!result;
+ $('downloadIntrinsics').disabled=result?.status!=='passed';
+ if(result)$('calibrationSummary').textContent=(result.status==='passed'?'Calibration passed':'More images or review needed')+'; fitting error '+result.fit_rms_px.toFixed(3)+' px; maximum validation error '+Math.max(...result.validation.per_view_rms_px).toFixed(3)+' px.';
+ if(value&&value.id!==lastCalibrationId){lastCalibrationId=value.id;lastCornerCount=-1;}
+ if(count>0&&count!==lastCornerCount){lastCornerCount=count;void refreshCalibrationImage('corners');}
+ if(phase==='complete'&&$('undistortionImage').hidden)void refreshCalibrationImage('preview');
+}
+async function refreshCalibrationImage(kind){
+ try{
+  const response=await fetch('/api/calibration/'+kind,{headers:{Authorization:'Bearer '+accessKey}});if(!response.ok)return;
+  const url=URL.createObjectURL(await response.blob()),isCorners=kind==='corners';
+  const previous=isCorners?cornerImageUrl:previewImageUrl;if(previous)URL.revokeObjectURL(previous);
+  if(isCorners)cornerImageUrl=url;else previewImageUrl=url;
+  const id=isCorners?'cornersImage':'undistortionImage';$(id).src=url;$(id).hidden=false;$(isCorners?'cornersHeading':'previewHeading').hidden=false;
+ }catch(_){}
+}
+async function calibrationAction(action){
+ if(calibrationBusy)return;
+ let failure='';
+ calibrationError='';
+ calibrationBusy=true;updateCalibration(calibration);
+ if(action==='solve')$('calibrationHint').textContent='Computing calibration and validation…';
+ try{
+  const body={session:sessionId,action,square_mm:Number($('squareMm').value),print_verified:$('printVerified').checked};
+  const result=await api('calibration','POST',body);updateCalibration(result);
+ }catch(error){failure=error.message;}
+ finally{calibrationBusy=false;calibrationError=failure;updateCalibration(calibration);}
+}
+async function downloadCalibration(kind){
+ try{
+  const response=await fetch('/api/calibration/'+kind,{headers:{Authorization:'Bearer '+accessKey}});
+  if(!response.ok)throw new Error('Calibration parameters are not available.');
+  const url=URL.createObjectURL(await response.blob()),link=document.createElement('a');
+  link.href=url;link.download=kind==='result'?'iphone-camera-calibration.json':'calib-rectified.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+ }catch(error){$('calibrationHint').textContent=error.message;}
+}
+function crc(value){return ((value>>>24)^(value>>>16)^(value>>>8)^value)&255;}
+function drawBarcode(ctx,width,height,timestamp){
+ const cell=Math.floor(width/44),left=Math.floor((width-cell*44)/2),top=height-24;
+ ctx.fillStyle='#000';ctx.fillRect(0,top,width,24);
+ const bits=[1,0];for(let b=31;b>=0;b--)bits.push((timestamp>>>b)&1);
+ const check=crc(timestamp);for(let b=7;b>=0;b--)bits.push((check>>>b)&1);bits.push(1,0);
+ bits.forEach((bit,i)=>{ctx.fillStyle=bit?'#fff':'#000';ctx.fillRect(left+i*cell,top,cell,24);});
+}
+function readTimestamp(){
+ const video=$('remote'),canvas=$('readback');if(!video.videoWidth)return null;
+ const w=video.videoWidth,h=video.videoHeight;canvas.width=w;canvas.height=1;
+ const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(video,0,h-12,w,1,0,0,w,1);
+ const pixels=ctx.getImageData(0,0,w,1).data,cell=Math.floor(w/44),left=Math.floor((w-cell*44)/2);
+ const brightness=i=>{const offset=(left+i*cell+Math.floor(cell/2))*4;return(pixels[offset]+pixels[offset+1]+pixels[offset+2])/3;};
+ if(brightness(0)<180||brightness(1)>75||brightness(42)<180||brightness(43)>75)return null;
+ let value=0,check=0;for(let i=2;i<34;i++)value=((value<<1)|(brightness(i)>128?1:0))>>>0;
+ for(let i=34;i<42;i++)check=(check<<1)|(brightness(i)>128?1:0);
+ return crc(value)===check?value:null;
+}
+function recordRemoteFrame(generation){
+ if(!active||generation!==remoteGeneration)return;
+ receivedFrames++;fpsFrames++;
+ const now=performance.now(),stamp=currentMode==='echo'?readTimestamp():null;
+ if(stamp!==null){const elapsed=((Math.round(now)>>>0)-stamp)>>>0;if(elapsed<30000){videoRtts.push(elapsed);if(videoRtts.length>45)videoRtts.shift();$('videoRtt').textContent=median(videoRtts)+' ms';}}
+ if(now-fpsStart>2000){$('fps').textContent=(fpsFrames*1000/(now-fpsStart)).toFixed(1)+' fps';fpsFrames=0;fpsStart=now;}
+ const remote=$('remote');
+ if(remote.requestVideoFrameCallback)remote.requestVideoFrameCallback(()=>recordRemoteFrame(generation));
+ else setTimeout(()=>recordRemoteFrame(generation),100);
+}
+async function saveMeasurements(){
+ if(!sessionId)return;
+ try{await api('measurements','POST',{session:sessionId,video_rtt_ms:median(videoRtts),data_rtt_ms:median(dataRtts),returned_video_frames:receivedFrames,video_rtt_samples:videoRtts.length});}catch(_){}
+}
+async function start(){
+ if(active)return;
+ if(!accessKey){say('Access key missing. Open the complete camera link.',true);return;}
+ if(!isSecureContext||!navigator.mediaDevices){say('Open the HTTPS camera link in Safari to access the camera.',true);return;}
+ $('start').disabled=true;$('stop').disabled=false;active=true;ending=false;
+ currentMode=$('captureMode').value;setConfigurationLocked(true);calibration=null;scan=null;scanError='';cameraReady=false;calibrationError='';lastCornerCount=-1;lastCalibrationId=null;
+ ['cornersImage','cornersHeading','undistortionImage','previewHeading'].forEach(id=>$(id).hidden=true);updateCalibration(null);
+ if(currentMode==='calibration')$('videoRtt').textContent='Calibration mode';
+ if(currentMode==='echo'){$('videoRtt').textContent='—';$('returnTitle').textContent='Workstation view';}
+ updateScan(null);
+ lastFailure=null;setStage('camera-request');
+ videoRtts=[];dataRtts=[];receivedFrames=0;fpsFrames=0;fpsStart=performance.now();
+ say('Requesting camera access…');
+ try{
+  if(currentMode==='scan'){
+   const profile=await loadScanProfile();
+   if(!profile.ready){const error=new Error(profile.message);error.name='ScanProfileError';throw error;}
+  }
+  const selectedCamera=currentMode==='scan'?scanProfile.device_id:$('cameraSelect').value;
+  camera=await LivekitClient.createLocalVideoTrack({...(selectedCamera?{deviceId:{exact:selectedCamera}}:{facingMode:'environment'}),resolution:{width:640,height:480,frameRate:15}});
+  if(currentMode==='scan'){
+   const capability=camera.mediaStreamTrack.getCapabilities?.().zoom;
+   if(capability&&scanProfile.zoom>=capability.min&&scanProfile.zoom<=capability.max)await camera.mediaStreamTrack.applyConstraints({advanced:[{zoom:scanProfile.zoom}]});
+  }
+  setStage('camera-preview');
+  camera.attach($('local'));await waitForCameraFrame($('local'));
+  await listCameras(camera.mediaStreamTrack.getSettings().deviceId);
+  setStage('server-session');
+  say('Camera ready. Connecting to workstation…');
+  const details=await api('session','POST');sessionId=details.session;
+  room=new LivekitClient.Room({adaptiveStream:false,dynacast:false});
+  room.on(LivekitClient.RoomEvent.TrackSubscribed,(track,publication,participant)=>{
+   if(participant.identity==='server'&&track.kind==='video'){
+    track.attach($('remote'));
+    setStage('receiving-video');
+    say(currentMode==='scan'?'Camera connected. Start scanning to view the reconstruction.':'Video connected. Switch views to inspect the returned image.');
+    remoteGeneration++;fpsStart=performance.now();fpsFrames=0;
+    if($('remote').requestVideoFrameCallback)$('remote').requestVideoFrameCallback(()=>recordRemoteFrame(remoteGeneration));
+    else setTimeout(()=>recordRemoteFrame(remoteGeneration),100);
+   }
+  });
+  room.on(LivekitClient.RoomEvent.DataReceived,(payload,participant,kind,topic)=>{
+   if(topic==='pong'&&participant?.identity==='server')try{
+    const sent=JSON.parse(new TextDecoder().decode(payload)).sent;
+    dataRtts.push(performance.now()-sent);if(dataRtts.length>20)dataRtts.shift();
+    $('dataRtt').textContent=Math.round(median(dataRtts))+' ms';
+   }catch(_){}
+  });
+  room.on(LivekitClient.RoomEvent.Reconnecting,()=>say('Reconnecting…'));
+  room.on(LivekitClient.RoomEvent.Reconnected,()=>say('Connection restored. Continue moving slowly.'));
+  room.on(LivekitClient.RoomEvent.Disconnected,()=>{if(active&&!ending){say('Disconnected. Close the connection and reconnect.',true);void end(true);}});
+  setStage('room-connect');
+  await room.connect(details.url,details.token);
+  const video=$('local'),canvas=$('outgoing'),ctx=canvas.getContext('2d');
+  const scale=Math.min(1,640/Math.max(video.videoWidth,video.videoHeight));
+  canvas.width=Math.floor(video.videoWidth*scale/2)*2;canvas.height=Math.floor(video.videoHeight*scale/2)*2;
+  cameraDimensions=[video.videoWidth,video.videoHeight];
+  const settings=camera.mediaStreamTrack.getSettings();
+  $('cameraInfo').textContent=(camera.mediaStreamTrack.label||'Rear camera')+' | capture '+video.videoWidth+'×'+video.videoHeight+' | stream '+canvas.width+'×'+canvas.height+' | up to 15 FPS';
+  setStage('camera-validation');
+  await api('camera','POST',{session:sessionId,mode:currentMode,label:camera.mediaStreamTrack.label,settings,outgoing:{width:canvas.width,height:canvas.height},orientation:screen.orientation?.type||String(window.orientation??'unknown')});
+  const draw=()=>{
+   if(video.videoWidth!==cameraDimensions[0]||video.videoHeight!==cameraDimensions[1]){say('Camera dimensions changed. Lock portrait orientation and reconnect.',true);void end(true);return;}
+   ctx.drawImage(video,0,0,canvas.width,canvas.height);if(currentMode==='echo')drawBarcode(ctx,canvas.width,canvas.height,Math.round(performance.now())>>>0);
+  };
+  draw();drawTimer=setInterval(draw,1000/15);
+  setStage('video-publish');
+  outgoingTrack=new LivekitClient.LocalVideoTrack(canvas.captureStream(15).getVideoTracks()[0]);
+  await room.localParticipant.publishTrack(outgoingTrack,{name:'phone-camera',source:LivekitClient.Track.Source.Camera,simulcast:false,videoEncoding:{maxBitrate:900000,maxFramerate:15}});
+  cameraReady=true;
+  updateCalibration(null);
+  updateScan(null);
+  say('Camera stream sent. Waiting for workstation video…');
+  pingTimer=setInterval(()=>{if(room?.state==='connected')room.localParticipant.publishData(new TextEncoder().encode(JSON.stringify({sent:performance.now()})),{reliable:false,destinationIdentities:['server'],topic:'ping'}).catch(()=>{});},1000);
+  statusTimer=setInterval(async()=>{
+   await saveMeasurements();
+   try{const status=await api('status');if(!calibrationBusy)updateCalibration(status.calibration);if(!scanBusy)updateScan(status.scan);if(status.last_error_type)say('Video processing error: '+status.last_error_type,true);if(status.closed&&active){say('Connection ended. Connect again to continue.',true);await end(true);}}catch(_){}
+  },currentMode==='echo'?4000:1500);
+ }catch(error){
+  errors.push(error.name);
+  lastFailure={stage,name:error.name};diagnostic('error',error);
+  const labels={'camera-request':'Start camera','camera-preview':'Prepare camera preview','server-session':'Connect to workstation','room-connect':'Join video connection','camera-validation':'Check camera calibration','video-publish':'Send video','receiving-video':'Receive workstation video'};
+  const known={ScanProfileError:error.message,NotAllowedError:stage==='camera-request'?'Camera permission is required. Allow camera access for this site.':'Video playback was blocked. Reopen this page in Safari.',NotFoundError:currentMode==='scan'?'Calibrated camera not found. Use the same phone and camera as calibration.':'No camera is available.',NotReadableError:'Camera is in use. Close other camera apps or pages.',CameraPreviewTimeout:'Camera permission granted but preview unavailable. Reopen in Safari and connect.'};
+  const message=(known[error.name]||(error.status?error.message:'Connection interrupted. Please reconnect.'))+'\nFailed at: '+(labels[stage]||stage)+'（'+error.name+'）';
+  await end(true);say(message,true);
+ }
+}
+async function end(preserveStatus=false){
+ if(ending)return;ending=true;active=false;
+ if(!preserveStatus&&currentMode==='scan'&&scan&&['starting','running','stopping'].includes(scan.lifecycle))say('Disconnecting and saving the model…');
+ cameraReady=false;
+ clearInterval(drawTimer);clearInterval(pingTimer);clearInterval(statusTimer);remoteGeneration++;
+ await saveMeasurements();
+ if(outgoingTrack){outgoingTrack.stop();outgoingTrack=null;}
+ if(camera){camera.stop();camera.detach();camera=null;}
+ if(room){await room.disconnect();room=null;}
+ if(sessionId){try{await api('session','DELETE');if(currentMode==='scan'){const status=await api('status');updateScan(status.scan);}}catch(_){}sessionId=null;}
+ $('local').srcObject=null;$('remote').srcObject=null;$('start').disabled=false;$('stop').disabled=true;
+ setConfigurationLocked(false);updateCalibration(calibration);updateScan(scan);
+ if(!preserveStatus)say('Connection ended. The camera is off.');ending=false;
+}
+$('start').onclick=start;$('stop').onclick=()=>end();
+$('loadCameras').onclick=loadCameraList;
+$('captureMode').onchange=updateMode;
+$('printVerified').onchange=()=>updateCalibration(calibration);
+$('calibrationStart').onclick=()=>calibrationAction(calibration?'resume':'start');
+$('calibrationPause').onclick=()=>calibrationAction('pause');
+$('calibrationSolve').onclick=()=>calibrationAction('solve');
+$('downloadCalibration').onclick=()=>downloadCalibration('result');
+$('downloadIntrinsics').onclick=()=>downloadCalibration('intrinsics');
+$('scanStart').onclick=()=>scanAction('start');$('scanStop').onclick=()=>scanAction('stop');
+$('downloadModel').onclick=()=>downloadScan('model');$('downloadScanSummary').onclick=()=>downloadScan('summary');
+$('downloadCameraVideo').onclick=()=>downloadScan('camera-video');$('downloadFeedbackVideo').onclick=()=>downloadScan('feedback-video');
+$('openModelViewer').onclick=()=>window.open('/model'+(accessKey?'#key='+encodeURIComponent(accessKey):''),'_blank','noopener');
+updateMode();
+window.addEventListener('orientationchange',()=>{if(active){say('Orientation changed. Lock portrait orientation and reconnect.',true);void end(true);}});
+window.addEventListener('pagehide',()=>{camera?.stop();outgoingTrack?.stop();room?.disconnect();});
+// Minimal inspectable state for the real-network browser check; contains no tokens.
+window.phoneTestState=()=>({active,stage,lastFailure,receivedFrames,videoRtt:median(videoRtts),videoRttSamples:videoRtts.length,dataRtt:median(dataRtts),errors:[...errors]});
+</script>
+
+<script>
+// Presentation only. Existing camera, calibration, transport and scan handlers
+// remain in the preceding script; no extra frame processing or network polling.
+(() => {
+ const el=id=>document.getElementById(id),main=el('main'),dialog=el('settingsDialog');
+ let view='local',lastScanId=null,shownFeedbackId=null,lastLifecycle='',startedAt=0,endedAt=0,scheduled=false;
+ const text=(id,value)=>{if(el(id).textContent!==value)el(id).textContent=value;};
+ function setView(value){view=value;el('videoViews').dataset.view=value;el('showLocal').setAttribute('aria-pressed',String(value==='local'));el('showRemote').setAttribute('aria-pressed',String(value==='remote'));text('viewLabel',value==='local'?'Camera view':'Spatial feedback');}
+ function openSettings(){if(!dialog.open)dialog.showModal();}
+ el('settingsOpen').addEventListener('click',openSettings);el('lensSettings').addEventListener('click',openSettings);
+ el('settingsClose').addEventListener('click',()=>dialog.close());
+ dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
+ el('showLocal').addEventListener('click',()=>setView('local'));el('showRemote').addEventListener('click',()=>setView('remote'));
+ el('modePanelLink').addEventListener('click',()=>{const target=main.dataset.mode==='calibration'?el('calibrationPanel'):el('status');target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});});
+ el('captureMode').addEventListener('change',()=>{setView('local');dialog.close();schedule();});
+ function refresh(){
+  scheduled=false;
+  const connected=active&&cameraReady,connecting=active&&!cameraReady,mode=main.dataset.mode;
+  const lifecycle=scan?.lifecycle||'idle',phase=scan?.phase||'idle',running=['starting','running','stopping'].includes(lifecycle);
+  main.dataset.uiConnected=String(connected);main.dataset.uiConnecting=String(connecting);main.dataset.uiRunning=String(running);
+  const failed=el('status').classList.contains('error')||phase==='failed';
+  el('connectionPill').dataset.state=failed?'error':connected?'ready':connecting?'busy':'idle';
+  text('connectionLabel',failed?'Check connection':connected?'Connected':connecting?'Connecting':'Offline');
+  el('localScreen').dataset.ready=String(active&&!!el('local').srcObject&&el('local').readyState>=2);
+  el('remoteScreen').dataset.ready=String(active&&!!el('remote').srcObject&&el('remote').readyState>=2);
+  const loading=running&&['starting','loading_models','loading_camera','waiting_frames'].includes(phase);
+  const titles={idle:connected?'Ready to start':'Waiting for camera',starting:'Preparing model',loading_models:'Loading model',loading_camera:'Preparing camera',waiting_frames:'Waiting for frames',initializing:'Initializing',initializing_map:'Initializing map',mapping:'Reconstructing',stopping:'Finishing',saving:'Saving model',complete:'Saved',failed:'Scan incomplete'};
+  text('scanPhaseTitle',titles[phase]||'Preparing model');
+  text('backendLabel',scanProfile?.backend_label||'RGB RECONSTRUCTION');
+  const feedback=!!scanProfile?.feedback_enabled;
+  text('feedbackNoticeTitle',feedback?'Online feedback enabled':'Reconstruction preview');
+  text('feedbackLegendIntro',feedback?'Spatial feedback:':'Feedback legend:');
+  const reminders=hasSurfaceReminders(scanProfile?.feedback_representation);
+  text('redLegend',reminders?'Red: adjust viewpoint':'Red: low observation support');
+  text('blueLegend',reminders?'Blue: coverage gaps':'Blue hatching: unscored');
+  el('reminderLegend').hidden=!reminders;
+  text('downloadModel',scan?.model_kind==='point_cloud'?'Export PLY':'Export PLY');
+  el('feedbackStats').hidden=mode!=='scan'||!feedback||!Number.isFinite(scan?.unknown_fraction);
+  if(!el('feedbackStats').hidden)text('feedbackStats',reminders?'Strong cues '+Math.round((scan.normal_red_fraction||0)*100)+'% · Light cues '+Math.round((scan.light_red_fraction||0)*100)+'% · Blue '+Math.round(scan.unknown_fraction*100)+'%':'Red '+Math.round(scan.red_fraction*100)+'% · Unscored '+Math.round(scan.unknown_fraction*100)+'%');
+  text('processedFrames',Number.isFinite(scan?.frames_processed)?String(scan.frames_processed)+' frames':'—');
+  text('mappedViews',Number.isFinite(scan?.keyframes)?String(scan.keyframes)+' views':'—');
+  text('lensSummary',scanProfile?.ready?uiMessage(scanProfile.label||'Calibrated camera')+' · '+scanProfile.zoom+'× · portrait':'Rear camera · 1× · portrait');
+  if(!accessKey)text('scanProfile','Open the original camera link to load its calibration.');
+  el('previewNotice').hidden=mode!=='scan';
+  if(scan?.id&&scan.id!==lastScanId){lastScanId=scan.id;startedAt=0;endedAt=0;}
+  if(running&&!startedAt){startedAt=performance.now();endedAt=0;}
+  if(!running&&startedAt&&!endedAt)endedAt=performance.now();
+  if(feedback){
+   if(running&&scan?.id!==shownFeedbackId&&['observation_overlay','observation_unknown'].includes(scan?.output_kind)){setView('remote');shownFeedbackId=scan.id;}
+  }else if(running&&!['starting','running','stopping'].includes(lastLifecycle))setView('remote');
+  lastLifecycle=lifecycle;
+  text('dockTitle',connecting?'Connecting camera':loading?'Preparing reconstruction':running?(phase==='saving'||phase==='stopping'?'Saving scan':'Scanning'):connected?(mode==='scan'?'Camera ready':mode==='calibration'?'Camera calibration':'Video connection test'):'Connect camera to begin');
+  text('dockHint',connecting?'Allow camera access':loading?'First load may take a moment':running?'Finish and save at any time':connected?(mode==='scan'?'Start a new scene when ready':'View the camera and status above'):!accessKey?'Open the original camera link':scanProfile?.ready?'Calibrated camera · 1× · portrait':'Check calibration in Settings');
+  el('modePanelLink').hidden=mode==='echo';
+  if(connected&&mode==='scan')text('start','Connect camera');
+ }
+ function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(refresh);}}
+ const observed=['status','scanStatus','scanProfile','scanStart','scanStop','start','stop','calibrationHint','calibrationStart','calibrationPause'];
+ const observer=new MutationObserver(schedule);
+ for(const id of observed)observer.observe(el(id),{attributes:true,childList:true,characterData:true,subtree:true});
+ observer.observe(main,{attributes:true,attributeFilter:['data-mode']});
+ for(const id of ['local','remote'])for(const name of ['loadeddata','playing','emptied','resize'])el(id).addEventListener(name,schedule);
+ const tick=()=>{
+  if(startedAt){const seconds=Math.max(0,Math.floor(((endedAt||performance.now())-startedAt)/1000));text('sessionTimer',String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0'));}
+ };
+ let timer=setInterval(tick,1000);
+ window.addEventListener('pagehide',()=>{clearInterval(timer);timer=null;observer.disconnect();});
+ window.addEventListener('pageshow',event=>{if(event.persisted){
+  for(const id of observed)observer.observe(el(id),{attributes:true,childList:true,characterData:true,subtree:true});
+  observer.observe(main,{attributes:true,attributeFilter:['data-mode']});
+  if(timer===null)timer=setInterval(tick,1000);schedule();
+ }});
+ setView('local');refresh();
+})();
+
+</script>
+</body>
+</html>
